@@ -14,9 +14,6 @@ def remove_empty(lines):
 def process_instruction(instruction):
   return remove_empty(re.split('[" " ,]', instruction))
 
-def is_label(instruction):
-  return re.match("\w+:$", instruction)
-
 def get_opcode(operation):
   return data.opcode_binary[operation]
 
@@ -101,26 +98,22 @@ def main():
     print("Instruccion:")
     print(instruction_processed)
 
-    if is_label(instruction_processed[0]) and len(instruction_processed) == 1:
-      instruction_processed[0] = instruction_processed[0].replace(':', '')
-      data.labels[instruction_processed[0]] = "0000"
+    operands_number = int(get_operands_number(instruction_processed[0]))
+    instruction_processed[0] = get_opcode(instruction_processed[0])
+    operands = []
+
+    if operands_number == 2:
+      operands.append(define_type(instruction_processed[1]))
+      operands.append(define_type(instruction_processed[2]))
+
+      instruction_processed[0] += select_operands_addressing(operands[0], operands[1])
+
     else:
-      operands_number = int(get_operands_number(instruction_processed[0]))
-      instruction_processed[0] = get_opcode(instruction_processed[0])
-      operands = []
+      operands.append(define_type(instruction_processed[1]))
+      instruction_processed[0] += select_operands_addressing(operands[0], '')
 
-      if operands_number == 2:
-        operands.append(define_type(instruction_processed[1]))
-        operands.append(define_type(instruction_processed[2]))
-
-        instruction_processed[0] += select_operands_addressing(operands[0], operands[1])
-
-      else:
-        operands.append(define_type(instruction_processed[1]))
-        instruction_processed[0] += select_operands_addressing(operands[0], '')
-
-      for i in range(len(operands)):
-        instruction_processed[0] += get_operand(operands[i], instruction_processed[i + 1])
+    for i in range(len(operands)):
+      instruction_processed[0] += get_operand(operands[i], instruction_processed[i + 1])
 
     program_file.write(instruction_processed[0] + "\n")
 

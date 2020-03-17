@@ -1,4 +1,4 @@
-start:
+
   MOV R3, R4
   MOV R5, 2
   MOV $R1, 3
