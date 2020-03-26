@@ -101,6 +101,9 @@ def get_operand(operand_type, operand_value):
     elif operand_type == 'ri':
         operand_value = operand_value.replace('$R', '')
         return get_register_binary(operand_value)
+    elif operand_type == 'm':
+        operand_value = operand_value.replace('$', '')
+        return get_register_binary(operand_value)
     else:
         return get_binary8(int(operand_value))
 
@@ -125,7 +128,7 @@ def main():
             instruction_processed[0] += select_operands_addressing(
                 operands[0], operands[1])
 
-        else:
+        elif operands_number == 1:
             operands.append(define_type(instruction_processed[1]))
             instruction_processed[0] += select_operands_addressing(
                 operands[0], '')
