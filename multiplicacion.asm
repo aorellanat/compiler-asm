@@ -1,0 +1,8 @@
+MOV R1, 5
+MOV R2, 3
+MOV R0, 0
+ADD R0, R1
+SUB R2, 1
+CMP R2, 0
+JNE $3
+STP

@@ -7,6 +7,7 @@ from numpy import binary_repr
 source_file = open(sys.argv[1], "r")
 program_file = open(sys.argv[2], "w+")
 
+binary_list = []
 
 def get_operands_number(opcode):
     return data.opcode_operands_number[opcode]
@@ -138,6 +139,15 @@ def main():
                 operands[i], instruction_processed[i + 1])
 
         program_file.write(instruction_processed[0] + "\n")
+        binary_list.append(instruction_processed[0])
 
 
 main()
+
+for i, binary in enumerate(binary_list):
+
+    while len(binary) != 24:
+        binary = binary + '0'
+
+    print("\t\t" + str(i) + " => \"" + binary + "\",")
+
